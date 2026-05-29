@@ -10,7 +10,7 @@ export default function GlassEcommerce({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+   fetch("https://ecommerce-backend-aa33.onrender.com/api/products")
       .then(res => res.json())
       .then(data => {
         setProducts(data);
