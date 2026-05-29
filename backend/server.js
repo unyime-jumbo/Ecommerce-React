@@ -60,7 +60,9 @@ const products = [
 
 
 const express = require("express");
-const cors = require("cors");
+app.use(cors({
+  origin: "https://ecommerce-react-seven-bay.vercel.app"
+}));
 
 const app = express();
 
