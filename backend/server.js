@@ -3,6 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+const authRoutes = require("./auth");
+
 const app = express();
 
 app.use(cors({
@@ -37,6 +39,9 @@ app.get("/api/products", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Auth routes
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
