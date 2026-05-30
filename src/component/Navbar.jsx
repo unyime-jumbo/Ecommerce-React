@@ -1,5 +1,4 @@
-
-function Navbar({ cart, showCart, setShowCart }) {
+function Navbar({ cart, showCart, setShowCart, setShowCheckout }) {
 
   return (
     <div>
@@ -31,7 +30,6 @@ function Navbar({ cart, showCart, setShowCart }) {
           {/* Header */}
           <div className="flex justify-between items-center p-4 border-b">
             <h2 className="text-xl font-bold">Cart Items</h2>
-
             <button
               onClick={() => setShowCart(false)}
               className="text-red-500 font-bold"
@@ -55,7 +53,6 @@ function Navbar({ cart, showCart, setShowCart }) {
                     alt={item.name}
                     className="w-16 h-16 rounded-xl object-cover"
                   />
-
                   <div>
                     <h3 className="font-bold">{item.name}</h3>
                     <p className="text-cyan-500">{item.price}</p>
@@ -67,6 +64,19 @@ function Navbar({ cart, showCart, setShowCart }) {
               ))
             )}
           </div>
+
+          {/* Checkout Button */}
+          {cart.length > 0 && (
+            <div className="p-4 border-t">
+              <button
+                onClick={() => { setShowCart(false); setShowCheckout(true); }}
+                className="w-full py-3 bg-cyan-500 text-white font-black text-lg rounded-2xl hover:bg-cyan-600 transition"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
+          )}
+
         </div>
       )}
     </div>
