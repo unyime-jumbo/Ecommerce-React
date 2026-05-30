@@ -5,19 +5,19 @@ import Categories from './component/Categories';
 import Newsletter from './component/Newsletter';
 import Product from './component/product'
 import Footer from './component/Footer';
-
+import Checkout from './component/Checkout';
 
 function App() {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (item) => item.id === product.id
       );
-
       if (existingItem) {
         return prevCart.map((item) =>
           item.id === product.id
@@ -25,7 +25,6 @@ function App() {
             : item
         );
       }
-
       return [...prevCart, { ...product, qty: 1 }];
     });
   };
@@ -37,7 +36,6 @@ function App() {
     }
   }, []);
 
-
   useEffect(() => {
     if (cart.length > 0) {
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -47,17 +45,27 @@ function App() {
   return (
     <>
       <div className="min-h-screen bg-linear-to-br from-white via-slate-100 to-cyan-100 text-gray-800 overflow-hidden">
-        <Navbar cart={cart} showCart={showCart} setShowCart={setShowCart} />
+        <Navbar
+          cart={cart}
+          showCart={showCart}
+          setShowCart={setShowCart}
+          setShowCheckout={setShowCheckout}
+        />
         <Hero />
         <Categories />
-
         <Product
           addToCart={addToCart}
           showAll={showAll}
-          setShowAll={setShowAll} />
-
+          setShowAll={setShowAll}
+        />
         <Newsletter />
         <Footer />
+        {showCheckout && (
+          <Checkout
+            cart={cart}
+            setShowCheckout={setShowCheckout}
+          />
+        )}
       </div>
     </>
   )
