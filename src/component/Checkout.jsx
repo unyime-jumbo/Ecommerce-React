@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePaystackPayment } from 'react-paystack';
 
 export default function Checkout({ cart, setShowCheckout }) {
   const [form, setForm] = useState({
@@ -20,20 +21,43 @@ export default function Checkout({ cart, setShowCheckout }) {
   };
 
   const totalUSD = getTotal();
-  const totalNGN = (totalUSD * 1600).toLocaleString();
+  const totalNGN = totalUSD * 1600;
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: form.email,
+    amount: totalNGN * 100,
+    publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+    metadata: {
+      name: form.fullname,
+      phone: form.phone,
+      address: form.address
+    }
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const onSuccess = (reference) => {
+    alert(`Payment successful! Reference: ${reference.reference}`);
+    setShowCheckout(false);
+  };
+
+  const onClose = () => {
+    alert('Payment cancelled.');
+  };
 
   const handlePayment = () => {
     if (!form.fullname || !form.email || !form.phone || !form.address) {
       alert("Please fill in all fields!");
       return;
     }
-    alert("Payment coming soon! We will integrate Paystack next.");
+    initializePayment({ onSuccess, onClose });
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-2xl font-black">Checkout</h2>
@@ -64,7 +88,7 @@ export default function Checkout({ cart, setShowCheckout }) {
             ))}
             <div className="mt-3 text-right">
               <p className="font-black text-xl">Total: ${totalUSD}</p>
-              <p className="text-gray-500 text-sm">≈ ₦{totalNGN}</p>
+              <p className="text-gray-500 text-sm">≈ ₦{totalNGN.toLocaleString()}</p>
             </div>
           </div>
 
@@ -112,7 +136,7 @@ export default function Checkout({ cart, setShowCheckout }) {
             onClick={handlePayment}
             className="w-full py-4 bg-cyan-500 text-white font-black text-lg rounded-2xl hover:bg-cyan-600 transition"
           >
-            Pay ₦{totalNGN}
+            Pay ₦{totalNGN.toLocaleString()}
           </button>
 
         </div>
