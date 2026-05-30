@@ -32,6 +32,10 @@ function App() {
     });
   };
 
+  const removeFromCart = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
+
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -66,6 +70,7 @@ function App() {
           setShowAuth={setShowAuth}
           user={user}
           handleLogout={handleLogout}
+          removeFromCart={removeFromCart}
         />
         <Hero />
         <Categories />

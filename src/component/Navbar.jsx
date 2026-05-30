@@ -1,4 +1,4 @@
-function Navbar({ cart, showCart, setShowCart, setShowCheckout, setShowAuth, user, handleLogout }) {
+function Navbar({ cart, showCart, setShowCart, setShowCheckout, setShowAuth, user, handleLogout, removeFromCart }) {
 
   return (
     <div>
@@ -72,11 +72,17 @@ function Navbar({ cart, showCart, setShowCart, setShowCheckout, setShowAuth, use
                     alt={item.name}
                     className="w-16 h-16 rounded-xl object-cover"
                   />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-bold">{item.name}</h3>
                     <p className="text-cyan-500">{item.price}</p>
                     <p className="text-sm text-gray-500">Qty: {item.qty}</p>
                   </div>
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    className="text-red-400 hover:text-red-600 font-bold text-lg"
+                  >
+                    ✕
+                  </button>
                 </div>
               ))
             )}
