@@ -6,12 +6,15 @@ import Newsletter from './component/Newsletter';
 import Product from './component/product'
 import Footer from './component/Footer';
 import Checkout from './component/Checkout';
+import Auth from './component/Auth';
 
 function App() {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+  const [user, setUser] = useState(null);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -34,6 +37,10 @@ function App() {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
 
   useEffect(() => {
@@ -41,6 +48,12 @@ function App() {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
 
   return (
     <>
@@ -50,6 +63,9 @@ function App() {
           showCart={showCart}
           setShowCart={setShowCart}
           setShowCheckout={setShowCheckout}
+          setShowAuth={setShowAuth}
+          user={user}
+          handleLogout={handleLogout}
         />
         <Hero />
         <Categories />
@@ -64,6 +80,12 @@ function App() {
           <Checkout
             cart={cart}
             setShowCheckout={setShowCheckout}
+          />
+        )}
+        {showAuth && (
+          <Auth
+            setShowAuth={setShowAuth}
+            setUser={setUser}
           />
         )}
       </div>

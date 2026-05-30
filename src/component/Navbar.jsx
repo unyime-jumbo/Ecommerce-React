@@ -1,4 +1,4 @@
-function Navbar({ cart, showCart, setShowCart, setShowCheckout }) {
+function Navbar({ cart, showCart, setShowCart, setShowCheckout, setShowAuth, user, handleLogout }) {
 
   return (
     <div>
@@ -14,14 +14,33 @@ function Navbar({ cart, showCart, setShowCart, setShowCheckout }) {
           <li className="hover:text-cyan-500 cursor-pointer transition">Contact</li>
         </ul>
 
-        <button
-          onClick={() => setShowCart(!showCart)}
-          className="px-5 py-2 rounded-full bg-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition"
-        >
-          Cart (
-          {cart.reduce((total, item) => total + item.qty, 0)}
-          )
-        </button>
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              <span className="font-semibold text-cyan-600">Hi, {user.fullname}!</span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-full border border-cyan-500 text-cyan-500 font-semibold hover:bg-cyan-50 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setShowAuth(true)}
+              className="px-4 py-2 rounded-full border border-cyan-500 text-cyan-500 font-semibold hover:bg-cyan-50 transition"
+            >
+              Login
+            </button>
+          )}
+
+          <button
+            onClick={() => setShowCart(!showCart)}
+            className="px-5 py-2 rounded-full bg-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition"
+          >
+            Cart ({cart.reduce((total, item) => total + item.qty, 0)})
+          </button>
+        </div>
       </nav>
 
       {showCart && (
@@ -56,9 +75,7 @@ function Navbar({ cart, showCart, setShowCart, setShowCheckout }) {
                   <div>
                     <h3 className="font-bold">{item.name}</h3>
                     <p className="text-cyan-500">{item.price}</p>
-                    <p className="text-sm text-gray-500">
-                      Qty: {item.qty}
-                    </p>
+                    <p className="text-sm text-gray-500">Qty: {item.qty}</p>
                   </div>
                 </div>
               ))
